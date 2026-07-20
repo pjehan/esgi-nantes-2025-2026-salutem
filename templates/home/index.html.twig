@@ -89,9 +89,9 @@
                     </button>
                 </form>
             </article>
-            {% include 'doctor/_thumbnail.html.twig' with {'photo': 'doctor-1.jpg', 'fullname': 'Jack Smith'} only %}
-            {% include 'doctor/_thumbnail.html.twig' with {'photo': 'doctor-2.jpg', 'fullname': 'Norma Pedric'} only %}
-            {% include 'doctor/_thumbnail.html.twig' with {'photo': 'doctor-3.jpg', 'fullname': 'Maria Martin'} only %}
+            {% for doctor in doctors %}
+                {% include 'doctor/_thumbnail.html.twig' with {'doctor': doctor} only %}
+            {% endfor %}
         </div>
     </section>
 {% endblock %}

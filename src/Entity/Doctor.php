@@ -123,7 +123,7 @@ class Doctor
     }
 
     /**
-     * @return Collection<int, Specialty>
+     * @return Specialty[]
      */
     public function getSpecialties(): Collection
     {
@@ -144,5 +144,10 @@ class Doctor
         $this->specialties->removeElement($specialty);
 
         return $this;
+    }
+
+    public function getFullName(): string
+    {
+        return $this->firstName . ' ' . $this->lastName;
     }
 }
