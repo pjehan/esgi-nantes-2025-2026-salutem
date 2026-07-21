@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\AppointmentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
 class Appointment
@@ -27,6 +28,7 @@ class Appointment
     private ?string $phone = null;
 
     #[ORM\Column]
+    #[Assert\GreaterThanOrEqual('today')]
     private ?\DateTimeImmutable $date = null;
 
     #[ORM\ManyToOne]
