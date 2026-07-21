@@ -31,6 +31,8 @@ final class HomeController extends AbstractController
             $em->persist($appointment);
             $em->flush();
 
+            $this->addFlash('info', 'Votre rendez-vous a été correctement enregistré');
+
             return $this->redirectToRoute('app_home');
         }
 
