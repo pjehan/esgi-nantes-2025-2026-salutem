@@ -19,6 +19,7 @@ class UserFixtures extends Fixture
         $admin->setEmail('admin@salutem.fr');
         $admin->setPassword($this->hasher->hashPassword($admin, '1234'));
         $admin->setRoles(['ROLE_ADMIN']);
+        $manager->persist($admin);
 
         $manager->flush();
     }
