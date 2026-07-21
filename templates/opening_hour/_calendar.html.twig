@@ -1,0 +1,18 @@
+<table class="opening-hours">
+    {% for openingHour in openingHours %}
+        {% if currentWeekday === openingHour.dayOfWeek %}
+            <tr class="today">
+        {% else %}
+            <tr>
+        {% endif %}
+            <td>{{ openingHour.dayOfWeek|dayOfWeek }}</td>
+            <td class="hours">
+                {% if openingHour.openingTime %}
+                    {{ openingHour.openingTime|date('H:i') }} - {{ openingHour.closingTime|date('H:i') }}
+                {% else %}
+                    Fermé
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
