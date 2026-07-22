@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Appointment;
 use App\Entity\User;
+use App\Event\AppointmentCreatedEvent;
 use App\Form\AppointmentType;
 use App\Repository\DoctorRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class HomeController extends AbstractController
 {
@@ -21,7 +23,9 @@ final class HomeController extends AbstractController
         #[CurrentUser] ?User $user,
         Request $request,
         DoctorRepository $doctorRepository,
-        EntityManagerInterface $em): Response
+        EntityManagerInterface $em,
+        EventDispatcherInterface $eventDispatcher
+    ): Response
     {
         $doctors = $doctorRepository->findDoctorsWithSpecialties();
 
@@ -40,6 +44,7 @@ final class HomeController extends AbstractController
             $em->flush();
 
             $this->addFlash('info', 'Votre rendez-vous a été correctement enregistré');
+            $eventDispatcher->dispatch(new AppointmentCreatedEvent($appointment));
 
             return $this->redirectToRoute('app_home');
         }
