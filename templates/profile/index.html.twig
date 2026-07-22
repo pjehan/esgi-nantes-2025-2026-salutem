@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+    Modifier mon profil
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Mon profil</h1>
+
+        <h3>Mes rendez-vous</h3>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Créneau souhaité</th>
+                <th>Motif</th>
+                <th>Statut</th>
+                <th>Docteur</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.date|date('d/m/Y H:i') }}</td>
+                    <td>{{ appointment.message }}</td>
+                    <td>
+                        <div class="badge badge-{{ appointment.status.name|lower }}">
+                            {{ appointment.status.value }}
+                        </div>
+                    </td>
+                    <td>
+                        {% if appointment.doctor %}
+                            {{ appointment.doctor.fullName }}
+                        {% else %}
+                            Non attribué
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+{% endblock %}

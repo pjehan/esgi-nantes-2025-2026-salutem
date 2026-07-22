@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\AppointmentStatus;
 use App\Repository\AppointmentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -155,5 +156,19 @@ class Appointment
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getStatus(): AppointmentStatus
+    {
+        $now = new \DateTimeImmutable();
+        if ($this->date < $now) {
+            return AppointmentStatus::PASSED;
+        }
+
+        if ($this->doctor === null) {
+            return AppointmentStatus::PENDING;
+        }
+
+        return AppointmentStatus::CONFIRMED;
     }
 }
