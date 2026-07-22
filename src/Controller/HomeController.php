@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Appointment;
+use App\Entity\User;
 use App\Form\AppointmentType;
 use App\Repository\DoctorRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,12 +11,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(Request $request, DoctorRepository $doctorRepository, EntityManagerInterface $em): Response
+    public function index(
+        #[CurrentUser] ?User $user,
+        Request $request,
+        DoctorRepository $doctorRepository,
+        EntityManagerInterface $em): Response
     {
         $doctors = $doctorRepository->findDoctorsWithSpecialties();
 
@@ -27,6 +33,8 @@ final class HomeController extends AbstractController
             $date = $appointmentForm->get('date_start')->getData();
             $time = $appointmentForm->get('time_start')->getData();
             $appointment->setDate(new \DateTimeImmutable($date->format('Y-m-d') . ' ' . $time->format('H:i:s')));
+
+            $appointment->setUser($user);
 
             $em->persist($appointment);
             $em->flush();
