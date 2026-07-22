@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Doctor;
 use App\Form\DoctorType;
 use App\Repository\DoctorRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,13 +35,20 @@ final class DoctorController extends AbstractController
 
     #[Route('/doctor/new', name: 'app_doctor_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(Request $request, EntityManagerInterface $em, FileUploader $fileUploader): Response
     {
         $doctor = new Doctor();
         $form = $this->createForm(DoctorType::class, $doctor);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $photoFile = $form->get('photoFile')->getData();
+
+            if ($photoFile) {
+                $fileName = $fileUploader->upload($photoFile);
+                $doctor->setPhoto($fileName);
+            }
+
             $em->persist($doctor);
             $em->flush();
 

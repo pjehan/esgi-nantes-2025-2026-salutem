@@ -1,5 +1,5 @@
 <article class="doctor-thumbnail">
-    <img src="{{ asset('uploads/' ~ doctor.photo) }}" alt="{{ doctor.fullName }}">
+    <img src="{{ asset(upload_directory ~ '/' ~ doctor.photo) }}" alt="{{ doctor.fullName }}">
     <div class="doctor-details">
         <h4>{{ doctor.fullName }}</h4>
         <p>

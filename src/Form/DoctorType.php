@@ -20,7 +20,10 @@ class DoctorType extends AbstractType
         $builder
             ->add('firstName', options: ['label' => 'Prénom'])
             ->add('lastName', options: ['label' => 'Nom'])
-            ->add('photo', FileType::class, ['required' => false])
+            ->add('photoFile', FileType::class, [
+                'required' => false,
+                'mapped' => false,
+            ])
             ->add('phone', TelType::class, [
                 'label' => 'Téléphone',
                 'attr' => [
