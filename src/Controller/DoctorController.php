@@ -12,13 +12,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Serializer\SerializerInterface;
 
 final class DoctorController extends AbstractController
 {
-    #[Route('/doctors', name: 'app_doctors')]
-    public function index(DoctorRepository $doctorRepository): Response
+    #[Route('/doctors.{_format}', name: 'app_doctors', requirements: ['_format' => 'html|json'], defaults: ['_format' => 'html'], methods: ['GET'])]
+    public function index(Request $request, DoctorRepository $doctorRepository): Response
     {
         $doctors = $doctorRepository->findAll();
+
+        if ($request->getRequestFormat() === 'json') {
+            return $this->json($doctors, context: ['groups' => ['doctor:read']]);
+        }
 
         return $this->render('doctor/index.html.twig', [
             'doctors' => $doctors,

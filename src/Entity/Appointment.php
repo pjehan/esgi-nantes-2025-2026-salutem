@@ -6,6 +6,7 @@ use App\Enum\AppointmentStatus;
 use App\Repository\AppointmentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
@@ -14,32 +15,40 @@ class Appointment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['doctor:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['doctor:read'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['doctor:read'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['doctor:read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['doctor:read'])]
     private ?string $phone = null;
 
     #[ORM\Column]
     #[Assert\GreaterThanOrEqual('today')]
+    #[Groups(['doctor:read'])]
     private ?\DateTimeImmutable $date = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['doctor:read'])]
     private ?Specialty $specialty = null;
 
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     private ?Doctor $doctor = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['doctor:read'])]
     private ?string $message = null;
 
     #[ORM\ManyToOne(inversedBy: 'appointments')]

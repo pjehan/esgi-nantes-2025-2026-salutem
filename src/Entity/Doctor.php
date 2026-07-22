@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DoctorRepository::class)]
@@ -15,44 +16,53 @@ class Doctor
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['doctor:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 255)]
+    #[Groups(['doctor:read'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 255)]
+    #[Groups(['doctor:read'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['doctor:read'])]
     private ?string $photo = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Regex(pattern: '/[0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}/', message: 'Veuillez saisir un numéro de téléphone valide.')]
+    #[Groups(['doctor:read'])]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Email]
     #[Assert\Length(max: 255)]
+    #[Groups(['doctor:read'])]
     private ?string $email = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['doctor:read'])]
     private ?string $description = null;
 
     /**
      * @var Collection<int, Specialty>
      */
     #[ORM\ManyToMany(targetEntity: Specialty::class, inversedBy: 'doctors')]
+    #[Groups(['doctor:read'])]
     private Collection $specialties;
 
     /**
      * @var Collection<int, Appointment>
      */
     #[ORM\OneToMany(targetEntity: Appointment::class, mappedBy: 'doctor')]
+    #[Groups(['doctor:read'])]
     private Collection $appointments;
 
     public function __construct()
