@@ -16,6 +16,9 @@ class DoctorRepository extends ServiceEntityRepository
         parent::__construct($registry, Doctor::class);
     }
 
+    /**
+     * @return Doctor[]
+     */
     public function findDoctorsWithSpecialties(): array
     {
         return $this->createQueryBuilder('d')
