@@ -78,6 +78,9 @@
                     <li><a href="{{ path('app_doctors') }}">Nos docteurs</a></li>
                     <li><a href="#">Nous contacter</a></li>
                     {% if app.user %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('app_admin_appointment') }}">Admin</a></li>
+                        {% endif %}
                         <li><a href="{{ path('app_profile') }}">Mon profil</a></li>
                         <li><a href="{{ path('app_logout') }}">Se déconnecter</a></li>
                     {% else %}
